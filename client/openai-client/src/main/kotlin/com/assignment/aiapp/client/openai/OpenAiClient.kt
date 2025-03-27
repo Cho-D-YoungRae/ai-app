@@ -16,7 +16,7 @@ class OpenAiClient(
 
     private val chatClient = chatClientBuilder.build()
 
-    fun chat(messages: List<MessageRequest>, model: String): String {
+    fun chat(model: String, messages: List<MessageRequest>): String {
         val prompt = Prompt(
             toMessages(messages),
             OpenAiChatOptions.builder().model(model).build()

@@ -16,3 +16,24 @@ Content-Type: application/json
   "email": "cyr@test.com",
   "password": "1234"
 }
+
+
+### 채팅 1
+POST http://localhost:8080/v1/chat
+Content-Type: application/json
+Authorization: Bearer jwt-cyr@test.com
+
+{
+  "content": "안녕 무엇을 도와줄 수 있어?",
+  "model": "gpt-4o"
+}
+
+### 채팅 2
+POST http://localhost:8080/v1/chat
+Content-Type: application/json
+Authorization: Bearer jwt-cyr@test.com
+
+{
+  "content": "오늘 날씨에 대해 알려줄 수 있어?",
+  "model": "gpt-4o"
+}

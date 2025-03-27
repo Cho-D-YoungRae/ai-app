@@ -13,4 +13,5 @@ enum class ErrorType(
 
     USER_ALREADY_EXISTS(ErrorKind.DUPLICATED, "이미 존재하는 사용자입니다.", LogLevel.INFO),
     USER_AUTHENTICATION_FAILED(ErrorKind.AUTHENTICATION_FAILED, "사용자 인증에 실패했습니다.", LogLevel.INFO),
+    USER_NOT_FOUND(ErrorKind.NOT_FOUND, "사용자를 찾을 수 없습니다.", LogLevel.INFO),
 }

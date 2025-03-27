@@ -22,6 +22,7 @@ class UserRepository(
     fun find(email: String): User? {
         return userJpaRepository.findByEmail(email)?.let {
             User(
+                id = it.id!!,
                 email = it.email,
                 name = it.name,
                 role = it.role
@@ -34,6 +35,7 @@ class UserRepository(
             ?.takeIf { it.password == password }
             ?.let {
                 User(
+                    id = it.id!!,
                     email = it.email,
                     name = it.name,
                     role = it.role
