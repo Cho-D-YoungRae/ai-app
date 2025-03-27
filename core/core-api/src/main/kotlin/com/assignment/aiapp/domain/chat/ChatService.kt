@@ -2,6 +2,8 @@ package com.assignment.aiapp.domain.chat
 
 import com.assignment.aiapp.core.enums.ChatMessageRole
 import com.assignment.aiapp.domain.user.UserReader
+import com.assignment.aiapp.support.error.CoreException
+import com.assignment.aiapp.support.error.ErrorType
 import org.springframework.stereotype.Service
 import java.time.Clock
 import java.time.LocalDateTime
@@ -22,5 +24,15 @@ class ChatService(
         )
         val thread = chatReader.getThread(userReader.get(userEmail))
         return chatProcessor.chat(model, thread, message)
+    }
+
+    fun deleteThread(userEmail: String, threadId: Long) {
+        val thread = chatReader.getThread(threadId)
+        val user = userReader.get(userEmail)
+        if (thread.userId != user.id) {
+            throw CoreException(ErrorType.CHAT_THREAD_DELETE_FORBIDDEN, "threadId=$threadId, userId=${user.id}")
+        }
+
+        chatProcessor.deleteThread(thread)
     }
 }

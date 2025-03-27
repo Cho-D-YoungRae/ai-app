@@ -6,6 +6,7 @@ import com.assignment.aiapp.storage.db.core.ChatMessageJpaRepository
 import com.assignment.aiapp.storage.db.core.ChatThreadEntity
 import com.assignment.aiapp.storage.db.core.ChatThreadJpaRepository
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
 class ChatRepository(
@@ -18,9 +19,21 @@ class ChatRepository(
             ?.let {
                 ChatThread(
                     id = it.id!!,
+                    userId = it.userId,
                     createdAt = it.createdAt!!,
                 )
             }
+    }
+
+    fun findThread(threadId: Long): ChatThread? {
+        return chatThreadJpaRepository.findById(threadId)
+            .map {
+                ChatThread(
+                    id = it.id!!,
+                    userId = it.userId,
+                    createdAt = it.createdAt!!,
+                )
+            }.orElse(null)
     }
 
     fun createThread(user: User): ChatThread {
@@ -31,7 +44,16 @@ class ChatRepository(
         )
         return ChatThread(
             id = entity.id!!,
+            userId = entity.userId,
             createdAt = entity.createdAt!!,
+        )
+    }
+
+    @Transactional
+    fun delete(thread: ChatThread) {
+        chatThreadJpaRepository.deleteById(thread.id)
+        chatMessageJpaRepository.deleteAll(
+            chatMessageJpaRepository.findAllByThreadIdOrderByCreatedAtDesc(thread.id)
         )
     }
 

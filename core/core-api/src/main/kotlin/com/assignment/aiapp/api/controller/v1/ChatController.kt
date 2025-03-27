@@ -5,10 +5,7 @@ import com.assignment.aiapp.api.controller.v1.response.ChatResponse
 import com.assignment.aiapp.api.support.LoginUserEmail
 import com.assignment.aiapp.domain.chat.ChatService
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/v1")
@@ -23,5 +20,13 @@ class ChatController(
             content = message.content,
             chatAt = message.chatAt
         )
+    }
+
+    @DeleteMapping("/threads/{threadId}")
+    fun deleteThread(
+        @LoginUserEmail userEmail: String,
+        @PathVariable threadId: Long
+    ) {
+        chatService.deleteThread(userEmail, threadId)
     }
 }

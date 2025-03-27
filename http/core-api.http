@@ -37,3 +37,8 @@ Authorization: Bearer jwt-cyr@test.com
   "content": "오늘 날씨에 대해 알려줄 수 있어?",
   "model": "gpt-4o"
 }
+
+### 스레드 삭제
+DELETE http://localhost:8080/v1/threads/1
+Content-Type: application/json
+Authorization: Bearer jwt-cyr@test.com

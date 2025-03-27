@@ -1,6 +1,8 @@
 package com.assignment.aiapp.domain.chat
 
 import com.assignment.aiapp.domain.user.User
+import com.assignment.aiapp.support.error.CoreException
+import com.assignment.aiapp.support.error.ErrorType
 import org.springframework.stereotype.Component
 import java.time.Clock
 import java.time.LocalDateTime
@@ -19,6 +21,13 @@ class ChatReader(
         } else {
             thread
         }
+    }
+
+    fun getThread(threadId: Long): ChatThread {
+        return chatRepository.findThread(threadId) ?: throw CoreException(
+            ErrorType.CHAT_THREAD_NOT_FOUND,
+            "threadId=$threadId"
+        )
     }
 
     fun getMessages(thread: ChatThread): List<ChatMessage> {

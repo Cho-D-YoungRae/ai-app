@@ -37,4 +37,8 @@ class ChatProcessor(
             )
         }
     }
+
+    fun deleteThread(thread: ChatThread) {
+        chatRepository.delete(thread)
+    }
 }
