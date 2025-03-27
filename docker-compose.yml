@@ -1,0 +1,13 @@
+services:
+  postgresql:
+    container_name: ai-app-postgresql
+    image: postgres:15.8
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: aiapp
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./docker/postgresql/var/lib/postgresql/data:/var/lib/postgresql/data  # data
+      - ./storage/db-core/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql  # init
