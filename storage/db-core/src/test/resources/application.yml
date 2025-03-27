@@ -1,0 +1,5 @@
+spring:
+  application.name: db-core-test
+  profiles:
+    active: test
+    include: db-core
