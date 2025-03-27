@@ -15,4 +15,12 @@ class UserProcessor(
         }
         userRepository.add(userSignup)
     }
+
+    fun login(userLogin: UserLogin): User {
+        return userRepository.find(userLogin.email, userLogin.password)
+            ?: throw CoreException(
+                ErrorType.USER_AUTHENTICATION_FAILED,
+                "email=${userLogin.email}, password=${userLogin.password}"
+            )
+    }
 }

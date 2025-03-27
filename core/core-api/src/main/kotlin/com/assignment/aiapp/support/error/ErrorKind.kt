@@ -9,4 +9,5 @@ enum class ErrorKind {
     DUPLICATED,
     FORBIDDEN,
     ILLEGAL_STATE,
+    AUTHENTICATION_FAILED,
 }

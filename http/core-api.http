@@ -7,3 +7,12 @@ Content-Type: application/json
   "password": "1234",
   "name": "조영래"
 }
+
+### 로그인
+POST http://localhost:8080/v1/login
+Content-Type: application/json
+
+{
+  "email": "cyr@test.com",
+  "password": "1234"
+}

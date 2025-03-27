@@ -28,4 +28,16 @@ class UserRepository(
             )
         }
     }
+
+    fun find(email: String, password: String): User? {
+        return userJpaRepository.findByEmail(email)
+            ?.takeIf { it.password == password }
+            ?.let {
+                User(
+                    email = it.email,
+                    name = it.name,
+                    role = it.role
+                )
+            }
+    }
 }

@@ -40,6 +40,7 @@ class GlobalExceptionHandler: ResponseEntityExceptionHandler() {
             ErrorKind.NOT_FOUND -> HttpStatus.NOT_FOUND
             ErrorKind.DUPLICATED -> HttpStatus.CONFLICT
             ErrorKind.FORBIDDEN -> HttpStatus.FORBIDDEN
+            ErrorKind.AUTHENTICATION_FAILED -> HttpStatus.UNAUTHORIZED
         }
     }
 
