@@ -11,6 +11,21 @@
 docker compose up -d
 ```
 
+## 실행
+
+`http/core-api.http` 의 API 스펙에 따라 순차적으로 실행
+
+admin 로그인 시 로그인 API 를 아래와 같이 수정 후 발급되는 토큰 사용
+
+```json
+{
+  "email": "admin@test.com",
+  "password": "admin"
+}
+```
+
+API 의 파리미터를 변경하여 사용 가능
+
 ## 구조(core-api)
 
 > 계층 구조를 따름.
@@ -22,6 +37,8 @@ docker compose up -d
 - Data Access Layer
 
 ## 기능 구현
+
+> 2번 까지 구현 완료
 
 1. 사용자 관리 및 인증 기능
    - 개인 정보 암호화 제외

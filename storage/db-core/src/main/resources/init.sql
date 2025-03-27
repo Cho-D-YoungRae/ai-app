@@ -37,3 +37,7 @@ create table chat_message
 );
 
 create index ix_chat_message__threadid_chatat on chat_message (thread_id, chat_at desc);
+
+
+insert into users (email, password, name, role, created_at, updated_at)
+values ('admin@test.com', 'admin', 'Admin', 'ADMIN', now(), now());

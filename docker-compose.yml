@@ -10,4 +10,4 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - ./docker/postgresql/var/lib/postgresql/data:/var/lib/postgresql/data  # data
-      - ./storage/db-core/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql  # init
+      - ./storage/db-core/src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql  # init
