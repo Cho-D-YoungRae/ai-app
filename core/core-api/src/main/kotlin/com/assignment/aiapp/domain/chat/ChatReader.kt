@@ -40,4 +40,11 @@ class ChatReader(
     fun getThreads(user: User, page: Int, sort: Sort): List<ChatThread> {
         return chatRepository.findThreads(user, page, CHAT_PAGE_SIZE, sort)
     }
+
+    fun getMessage(id: Long): ChatMessage {
+        return chatRepository.findMessage(id) ?: throw CoreException(
+            ErrorType.CHAT_MESSAGE_NOT_FOUND,
+            "messageId=$id"
+        )
+    }
 }

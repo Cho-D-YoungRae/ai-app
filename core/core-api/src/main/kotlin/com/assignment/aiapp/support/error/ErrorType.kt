@@ -17,4 +17,8 @@ enum class ErrorType(
 
     CHAT_THREAD_NOT_FOUND(ErrorKind.NOT_FOUND, "채팅 스레드를 찾을 수 없습니다.", LogLevel.INFO),
     CHAT_THREAD_DELETE_FORBIDDEN(ErrorKind.FORBIDDEN, "채팅 스레드를 삭제할 수 없습니다.", LogLevel.INFO),
+    CHAT_MESSAGE_NOT_FOUND(ErrorKind.NOT_FOUND, "채팅 메시지를 찾을 수 없습니다.", LogLevel.INFO),
+
+    FEEDBACK_ALREADY_EXISTS(ErrorKind.DUPLICATED, "피드백이 이미 존재합니다.", LogLevel.INFO),
+    FEEDBACK_CREATE_FORBIDDEN(ErrorKind.FORBIDDEN, "자신의 대화만 피드백할 수 있습니다.", LogLevel.INFO),
 }

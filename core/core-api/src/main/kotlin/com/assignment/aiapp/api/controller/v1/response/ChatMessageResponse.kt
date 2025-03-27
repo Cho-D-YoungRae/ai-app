@@ -4,6 +4,7 @@ import com.assignment.aiapp.core.enums.ChatMessageRole
 import java.time.LocalDateTime
 
 data class ChatMessageResponse(
+    val id: Long,
     val content: String,
     val role: ChatMessageRole,
     val chatAt: LocalDateTime

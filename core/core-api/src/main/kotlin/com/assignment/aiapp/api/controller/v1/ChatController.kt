@@ -36,6 +36,7 @@ class ChatController(
                 createdAt = it.createdAt,
                 messages = it.messages.map { message ->
                     ChatMessageResponse(
+                        id = message.id,
                         content = message.content,
                         role = message.role,
                         chatAt = message.chatAt

@@ -10,12 +10,9 @@ import com.assignment.aiapp.support.error.CoreException
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.time.Clock
-import java.time.LocalDateTime
 
 @Repository
 class ChatRepository(
-    private val clock: Clock,
     private val chatThreadJpaRepository: ChatThreadJpaRepository,
     private val chatMessageJpaRepository: ChatMessageJpaRepository,
 ) {
@@ -64,7 +61,6 @@ class ChatRepository(
         val entity = chatThreadJpaRepository.save(
             ChatThreadEntity(
                 userId = user.id,
-                latestChatAt = LocalDateTime.now(clock),
             )
         )
         return ChatThread(
@@ -83,22 +79,10 @@ class ChatRepository(
         )
     }
 
-    fun findMessages(chatThread: ChatThread): List<ChatMessage> {
-        return chatMessageJpaRepository.findAllByThreadIdOrderByChatAtDesc(chatThread.id).map {
-            ChatMessage(
-                id = it.id!!,
-                content = it.content,
-                role = it.role,
-                chatAt = it.chatAt,
-            )
-        }
-    }
-
     @Transactional
     fun addMessage(thread: ChatThread, message: NewChatMessage): ChatMessage {
         chatThreadJpaRepository.findById(thread.id)
             .orElseThrow { CoreException("Thread not found. threadId=${thread.id}") }
-            .latestChatAt = message.chatAt
         val entity = chatMessageJpaRepository.save(
             ChatMessageEntity(
                 threadId = thread.id,
@@ -155,4 +139,23 @@ class ChatRepository(
         }
     }
 
+    fun findMessage(id: Long): ChatMessage? {
+        return chatMessageJpaRepository.findById(id)
+            .map {
+                ChatMessage(
+                    id = it.id!!,
+                    content = it.content,
+                    role = it.role,
+                    chatAt = it.chatAt,
+                )
+            }.orElse(null)
+    }
+
+    fun getUserId(chatMessage: ChatMessage): Long {
+        val chatMessageEntity = chatMessageJpaRepository.findById(chatMessage.id)
+            .orElseThrow { CoreException("Chat message not found. messageId=${chatMessage.id}") }
+        return chatThreadJpaRepository.findById(chatMessageEntity.threadId)
+            .orElseThrow { CoreException("Chat thread not found. threadId=${chatMessageEntity.threadId}") }
+            .userId
+    }
 }

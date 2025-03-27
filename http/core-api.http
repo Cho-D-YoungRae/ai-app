@@ -1,5 +1,5 @@
 ### 회원가입
-POST http://localhost:8080/v1/signup
+POST {{baseUrl}}/v1/signup
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### 로그인
-POST http://localhost:8080/v1/login
+POST {{baseUrl}}/v1/login
 Content-Type: application/json
 
 {
@@ -19,9 +19,9 @@ Content-Type: application/json
 
 
 ### 채팅 1
-POST http://localhost:8080/v1/chat
+POST {{baseUrl}}/v1/chat
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQzMDk0NzM5LCJleHAiOjE3NDMwOTgzMzl9.5AvT_Y1yE_vUG4fLqn2zPmLSbZKHo2Y7DL7Zk5YC9s8
+Authorization: Bearer {{accessToken}}
 
 {
   "content": "끝말잇기할래?",
@@ -29,19 +29,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQzMDk0NzM5L
 }
 
 ### 채팅 2
-POST http://localhost:8080/v1/chat
+POST {{baseUrl}}/v1/chat
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQzMDk0NzM5LCJleHAiOjE3NDMwOTgzMzl9.5AvT_Y1yE_vUG4fLqn2zPmLSbZKHo2Y7DL7Zk5YC9s8
+Authorization: Bearer {{accessToken}}
 
 {
-  "content": "이빨",
+  "content": "과자",
   "model": "gpt-4o"
 }
 
 ### 채팅 3
-POST http://localhost:8080/v1/chat
+POST {{baseUrl}}/v1/chat
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQzMDk0NzM5LCJleHAiOjE3NDMwOTgzMzl9.5AvT_Y1yE_vUG4fLqn2zPmLSbZKHo2Y7DL7Zk5YC9s8
+Authorization: Bearer {{accessToken}}
 
 {
   "content": "소방차",
@@ -49,10 +49,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQzMDk0NzM5L
 }
 
 ### 대화 목록 조회
-GET http://localhost:8080/v1/conversations?page=0&sort=DESC
-Authorization: Bearer jwt-cyr@test.com
+GET {{baseUrl}}/v1/threads?page=0&sort=DESC
+Authorization: Bearer {{accessToken}}
 
 ### 스레드 삭제
-DELETE http://localhost:8080/v1/threads/1
+DELETE {{baseUrl}}/v1/threads/1
 Content-Type: application/json
-Authorization: Bearer jwt-cyr@test.com
+Authorization: Bearer {{accessToken}}
+
+### 피드백
+POST {{baseUrl}}/v1/feedback
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "messageId": 6,
+  "type": "POSITIVE"
+}
