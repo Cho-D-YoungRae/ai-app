@@ -16,17 +16,15 @@ class ChatProcessor(
 
 ) {
 
-    fun chat(model: String, thread: ChatThread, message: ChatMessage): ChatMessage {
+    fun chat(model: String, thread: ChatThread, newMessage: NewChatMessage): ChatMessage {
         val messages = chatReader.getMessages(thread).toMutableList()
-        messages.add(message)
-        chatRepository.addMessage(thread, message)
-        val answer = ChatMessage(
+        messages.add(chatRepository.addMessage(thread, newMessage))
+
+        return chatRepository.addMessage(thread, NewChatMessage(
             content = openAiClient.chat(model, toRequestList(messages)),
             role = ChatMessageRole.ASSISTANT,
             chatAt = LocalDateTime.now(clock)
-        )
-        chatRepository.addMessage(thread, answer)
-        return answer
+        ))
     }
 
     private fun toRequestList(messages: List<ChatMessage>): List<MessageRequest> {

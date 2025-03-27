@@ -19,13 +19,13 @@ class ChatService(
 ) {
 
     fun chat(userEmail: String, model: String, messageContent: String): ChatMessage {
-        val message = ChatMessage(
+        val newMessage = NewChatMessage(
             content = messageContent,
             role = ChatMessageRole.USER,
             chatAt = LocalDateTime.now(clock)
         )
         val thread = chatReader.getThread(userReader.get(userEmail))
-        return chatProcessor.chat(model, thread, message)
+        return chatProcessor.chat(model, thread, newMessage)
     }
 
     fun getConversations(userEmail: String, page: Int, sort: Sort): List<Conversation> {

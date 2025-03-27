@@ -62,6 +62,7 @@ class ChatRepository(
     fun findMessages(chatThread: ChatThread): List<ChatMessage> {
         return chatMessageJpaRepository.findAllByThreadIdOrderByCreatedAtDesc(chatThread.id).map {
             ChatMessage(
+                id = it.id!!,
                 content = it.content,
                 role = it.role,
                 chatAt = it.chatAt,
@@ -69,14 +70,20 @@ class ChatRepository(
         }
     }
 
-    fun addMessage(thread: ChatThread, message: ChatMessage) {
-        chatMessageJpaRepository.save(
+    fun addMessage(thread: ChatThread, message: NewChatMessage): ChatMessage {
+        val entity = chatMessageJpaRepository.save(
             ChatMessageEntity(
                 threadId = thread.id,
                 content = message.content,
                 role = message.role,
                 chatAt = message.chatAt,
             )
+        )
+        return ChatMessage(
+            id = entity.id!!,
+            content = entity.content,
+            role = entity.role,
+            chatAt = entity.chatAt,
         )
     }
 
@@ -114,6 +121,7 @@ class ChatRepository(
             .mapValues { entry ->
                 entry.value.map {
                     ChatMessage(
+                        id = it.id!!,
                         content = it.content,
                         role = it.role,
                         chatAt = it.chatAt,

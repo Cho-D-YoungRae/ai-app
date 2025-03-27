@@ -3,8 +3,7 @@ package com.assignment.aiapp.domain.chat
 import com.assignment.aiapp.core.enums.ChatMessageRole
 import java.time.LocalDateTime
 
-data class ChatMessage(
-    val id: Long,
+data class NewChatMessage(
     val content: String,
     val role: ChatMessageRole,
     val chatAt: LocalDateTime
