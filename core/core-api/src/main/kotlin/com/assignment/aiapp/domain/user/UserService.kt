@@ -5,15 +5,15 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(
     private val userProcessor: UserProcessor,
-    private val userTokenEncoder: UserTokenEncoder,
+    private val jwtTokenProvider: JwtTokenProvider
 ) {
 
     fun signup(userSignup: UserSignup) {
         userProcessor.signup(userSignup)
     }
 
-    fun login(userLogin: UserLogin): AccessToken {
+    fun login(userLogin: UserLogin): String {
         val user = userProcessor.login(userLogin)
-        return userTokenEncoder.encode(user)
+        return jwtTokenProvider.encode(user)
     }
 }

@@ -12,7 +12,7 @@ class CoreException: RuntimeException {
         this.errorType = errorType
     }
 
-    constructor(message: String, cause: Throwable, errorType: ErrorType) : super("$errorType : $message", cause) {
+    constructor(errorType: ErrorType, message: String, cause: Throwable) : super("$errorType : $message", cause) {
         this.errorType = errorType
     }
 

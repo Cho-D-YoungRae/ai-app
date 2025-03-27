@@ -25,7 +25,7 @@ class UserController(
     fun login(@RequestBody @Validated request: UserLoginRequest): UserLoginResponse {
         val accessToken = userService.login(request.toUserLogin())
         return UserLoginResponse(
-            accessToken = accessToken.value
+            accessToken = accessToken
         )
     }
 

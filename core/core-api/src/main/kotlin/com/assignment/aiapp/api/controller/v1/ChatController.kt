@@ -5,7 +5,7 @@ import com.assignment.aiapp.api.controller.v1.request.ChatRequest
 import com.assignment.aiapp.api.controller.v1.response.ChatMessageResponse
 import com.assignment.aiapp.api.controller.v1.response.ChatResponse
 import com.assignment.aiapp.api.controller.v1.response.ConversationResponse
-import com.assignment.aiapp.api.support.LoginUserEmail
+import com.assignment.aiapp.api.support.LoginUserId
 import com.assignment.aiapp.domain.Sort
 import com.assignment.aiapp.domain.chat.ChatService
 import org.springframework.validation.annotation.Validated
@@ -18,8 +18,8 @@ class ChatController(
 ) {
 
     @PostMapping("/chat")
-    fun chat(@LoginUserEmail userEmail: String, @RequestBody @Validated request: ChatRequest): ChatResponse {
-        val message = chatService.chat(userEmail, request.model, request.content)
+    fun chat(@LoginUserId userId: Long, @RequestBody @Validated request: ChatRequest): ChatResponse {
+        val message = chatService.chat(userId, request.model, request.content)
         return ChatResponse(
             content = message.content,
             chatAt = message.chatAt
@@ -27,8 +27,8 @@ class ChatController(
     }
 
     @GetMapping("/conversations")
-    fun getConversations(@LoginUserEmail userEmail: String, page: Int, sort: Sort): ListResponse<ConversationResponse> {
-        val conversations = chatService.getConversations(userEmail, page, sort)
+    fun getConversations(@LoginUserId userId: Long, page: Int, sort: Sort): ListResponse<ConversationResponse> {
+        val conversations = chatService.getConversations(userId, page, sort)
         return ListResponse(conversations.map {
             ConversationResponse(
                 threadId = it.thread.id,
@@ -47,9 +47,9 @@ class ChatController(
 
     @DeleteMapping("/threads/{threadId}")
     fun deleteThread(
-        @LoginUserEmail userEmail: String,
+        @LoginUserId userId: Long,
         @PathVariable threadId: Long
     ) {
-        chatService.deleteThread(userEmail, threadId)
+        chatService.deleteThread(userId, threadId)
     }
 }

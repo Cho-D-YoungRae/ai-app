@@ -19,6 +19,17 @@ class UserRepository(
         )
     }
 
+    fun find(id: Long): User? {
+        return userJpaRepository.findById(id).map {
+            User(
+                id = it.id!!,
+                email = it.email,
+                name = it.name,
+                role = it.role
+            )
+        }.orElse(null)
+    }
+
     fun find(email: String): User? {
         return userJpaRepository.findByEmail(email)?.let {
             User(

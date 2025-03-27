@@ -1,7 +1,6 @@
 package com.assignment.aiapp.api.support
 
-import com.assignment.aiapp.domain.user.AccessToken
-import com.assignment.aiapp.domain.user.UserTokenDecoder
+import com.assignment.aiapp.domain.user.JwtTokenProvider
 import com.assignment.aiapp.support.error.CoreException
 import com.assignment.aiapp.support.error.ErrorType
 import org.springframework.core.MethodParameter
@@ -14,12 +13,12 @@ import org.springframework.web.method.support.ModelAndViewContainer
 private const val BEARER_PREFIX = "Bearer "
 
 class LoginUserEmailArgumentResolver(
-    private val userTokenDecoder: UserTokenDecoder
+    private val jwtTokenProvider: JwtTokenProvider
 ): HandlerMethodArgumentResolver {
 
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        val hasAnnotation = parameter.hasParameterAnnotation(LoginUserEmail::class.java)
-        val hasType = (String::class.java == parameter.parameterType)
+        val hasAnnotation = parameter.hasParameterAnnotation(LoginUserId::class.java)
+        val hasType = (Long::class.java == parameter.parameterType)
         return hasAnnotation && hasType
     }
 
@@ -33,8 +32,7 @@ class LoginUserEmailArgumentResolver(
         if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
             throw CoreException(ErrorType.USER_AUTHENTICATION_FAILED, "Authorization header is missing or invalid")
         }
-        val token = AccessToken(authorizationHeader.substring(BEARER_PREFIX.length))
-        val userEmail = userTokenDecoder.decode(token)
-        return userEmail
+        val token = authorizationHeader.substring(BEARER_PREFIX.length)
+        return jwtTokenProvider.decode(token)
     }
 }

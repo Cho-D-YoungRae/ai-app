@@ -9,6 +9,12 @@ server:
       max: 600
       min-spare: 100
 
+## 설정 값 분리 필요.
+app:
+  jwt:
+    secret-key: my-secret-key-my-secret-key-my-secret-key
+    expiration: 3600
+
 ---
 spring.config.activate.on-profile: local
 

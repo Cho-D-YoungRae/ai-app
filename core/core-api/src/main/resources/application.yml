@@ -4,3 +4,4 @@ spring:
     include:
       - db-core
       - openai-client
+      - core-api

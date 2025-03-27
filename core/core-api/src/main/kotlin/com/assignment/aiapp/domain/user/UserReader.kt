@@ -9,10 +9,10 @@ class UserReader(
     private val userRepository: UserRepository,
 ) {
 
-    fun get(email: String): User {
-        return userRepository.find(email) ?: throw CoreException(
+    fun get(id: Long): User {
+        return userRepository.find(id) ?: throw CoreException(
             ErrorType.USER_NOT_FOUND,
-            "사용자를 찾을 수 없습니다. email: $email"
+            "사용자를 찾을 수 없습니다. id: $id"
         )
     }
 }
