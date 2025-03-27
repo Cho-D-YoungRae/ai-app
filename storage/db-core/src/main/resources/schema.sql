@@ -4,7 +4,9 @@ create table users
     email    varchar(255) not null,
     password varchar(255) not null,
     name     varchar(45)  not null,
-    role     varchar(25)  not null
+    role     varchar(25)  not null,
+    created_at timestamp(6) not null,
+    updated_at timestamp(6) not null
 );
 
 alter table users
