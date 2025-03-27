@@ -17,7 +17,7 @@ class UserEntity(
     @Column(name = "password", nullable = false)
     val password: String,
 
-    @Column(name = "name", length = 25, nullable = false)
+    @Column(name = "name", length = 45, nullable = false)
     val name: String,
 
     @Enumerated(EnumType.STRING)
