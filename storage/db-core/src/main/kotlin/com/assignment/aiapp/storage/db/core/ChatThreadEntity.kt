@@ -9,7 +9,8 @@ import jakarta.persistence.Table
 @Table(
     name = "chat_threads",
     indexes = [
-        Index(name = "ix_chat_threads__userid_createdat", columnList = "user_id, created_at desc")
+        Index(name = "ix_chat_threads__userid_createdat", columnList = "user_id, created_at desc"),
+        Index(name = "ix_chat_threads__createdat", columnList = "created_at desc")
     ]
 )
 @Entity

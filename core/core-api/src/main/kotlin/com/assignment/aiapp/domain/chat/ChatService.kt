@@ -1,6 +1,8 @@
 package com.assignment.aiapp.domain.chat
 
 import com.assignment.aiapp.core.enums.ChatMessageRole
+import com.assignment.aiapp.core.enums.UserRole
+import com.assignment.aiapp.domain.Sort
 import com.assignment.aiapp.domain.user.UserReader
 import com.assignment.aiapp.support.error.CoreException
 import com.assignment.aiapp.support.error.ErrorType
@@ -24,6 +26,15 @@ class ChatService(
         )
         val thread = chatReader.getThread(userReader.get(userEmail))
         return chatProcessor.chat(model, thread, message)
+    }
+
+    fun getConversations(userEmail: String, page: Int, sort: Sort): List<Conversation> {
+        val user = userReader.get(userEmail)
+        return if (UserRole.ADMIN == user.role) {
+            chatReader.getChatList(page, sort)
+        } else {
+            chatReader.getChatList(user, page, sort)
+        }
     }
 
     fun deleteThread(userEmail: String, threadId: Long) {

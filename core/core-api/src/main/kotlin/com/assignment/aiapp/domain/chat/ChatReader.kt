@@ -1,11 +1,14 @@
 package com.assignment.aiapp.domain.chat
 
+import com.assignment.aiapp.domain.Sort
 import com.assignment.aiapp.domain.user.User
 import com.assignment.aiapp.support.error.CoreException
 import com.assignment.aiapp.support.error.ErrorType
 import org.springframework.stereotype.Component
 import java.time.Clock
 import java.time.LocalDateTime
+
+private const val CHAT_PAGE_SIZE = 10
 
 @Component
 class ChatReader(
@@ -32,5 +35,27 @@ class ChatReader(
 
     fun getMessages(thread: ChatThread): List<ChatMessage> {
         return chatRepository.findMessages(thread)
+    }
+
+    fun getChatList(page: Int, sort: Sort): List<Conversation> {
+        val threads = chatRepository.findThreads(page, CHAT_PAGE_SIZE, sort)
+        val threadIdToMessages = chatRepository.findGroupedMessages(threads)
+        return threads.map { thread ->
+            Conversation(
+                thread = thread,
+                messages = threadIdToMessages[thread.id] ?: emptyList(),
+            )
+        }
+    }
+
+    fun getChatList(user: User, page: Int, sort: Sort): List<Conversation> {
+        val threads = chatRepository.findThreads(user, page, CHAT_PAGE_SIZE, sort)
+        val threadIdToMessages = chatRepository.findGroupedMessages(threads)
+        return threads.map { thread ->
+            Conversation(
+                thread = thread,
+                messages = threadIdToMessages[thread.id] ?: emptyList(),
+            )
+        }
     }
 }

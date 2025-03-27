@@ -1,10 +1,12 @@
 package com.assignment.aiapp.domain.chat
 
+import com.assignment.aiapp.domain.Sort
 import com.assignment.aiapp.domain.user.User
 import com.assignment.aiapp.storage.db.core.ChatMessageEntity
 import com.assignment.aiapp.storage.db.core.ChatMessageJpaRepository
 import com.assignment.aiapp.storage.db.core.ChatThreadEntity
 import com.assignment.aiapp.storage.db.core.ChatThreadJpaRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
@@ -76,5 +78,48 @@ class ChatRepository(
                 chatAt = message.chatAt,
             )
         )
+    }
+
+    fun findThreads(page: Int, size: Int, sort: Sort): List<ChatThread> {
+        return if (sort == Sort.ASC) {
+            chatThreadJpaRepository.findAllByOrderByCreatedAtAsc(PageRequest.of(page, size))
+        } else {
+            chatThreadJpaRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size))
+        }.map {
+            ChatThread(
+                id = it.id!!,
+                userId = it.userId,
+                createdAt = it.createdAt!!,
+            )
+        }
+    }
+
+    fun findThreads(user: User, page: Int, size: Int, sort: Sort): List<ChatThread> {
+        return if (sort == Sort.ASC) {
+            chatThreadJpaRepository.findAllByUserIdOrderByCreatedAtAsc(user.id, PageRequest.of(page, size))
+        } else {
+            chatThreadJpaRepository.findAllByUserIdOrderByCreatedAtDesc(user.id, PageRequest.of(page, size))
+        }.map {
+            ChatThread(
+                id = it.id!!,
+                userId = it.userId,
+                createdAt = it.createdAt!!,
+            )
+        }
+    }
+
+    fun findGroupedMessages(threads: Collection<ChatThread>): Map<Long, List<ChatMessage>> {
+        return chatMessageJpaRepository.findAllByThreadIdIn(threads.map { it.id })
+            .groupBy { messageEntity -> messageEntity.threadId }
+            .mapValues { entry ->
+                entry.value.map {
+                    ChatMessage(
+                        content = it.content,
+                        role = it.role,
+                        chatAt = it.chatAt,
+                    )
+                }
+            }
+
     }
 }
