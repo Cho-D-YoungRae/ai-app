@@ -6,22 +6,27 @@ import com.assignment.aiapp.storage.db.core.ChatMessageEntity
 import com.assignment.aiapp.storage.db.core.ChatMessageJpaRepository
 import com.assignment.aiapp.storage.db.core.ChatThreadEntity
 import com.assignment.aiapp.storage.db.core.ChatThreadJpaRepository
+import com.assignment.aiapp.support.error.CoreException
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.Clock
+import java.time.LocalDateTime
 
 @Repository
 class ChatRepository(
+    private val clock: Clock,
     private val chatThreadJpaRepository: ChatThreadJpaRepository,
     private val chatMessageJpaRepository: ChatMessageJpaRepository,
 ) {
 
     fun findLatestThraed(user: User): ChatThread? {
-        return chatThreadJpaRepository.findFirstByUserIdOrderByCreatedAtDesc(user.id)
+        return chatThreadJpaRepository.findFirstByUserIdOrderByLatestChatAtDesc(user.id)
             ?.let {
                 ChatThread(
                     id = it.id!!,
                     userId = it.userId,
+                    latestChatAt = it.latestChatAt,
                     createdAt = it.createdAt!!,
                 )
             }
@@ -33,6 +38,7 @@ class ChatRepository(
                 ChatThread(
                     id = it.id!!,
                     userId = it.userId,
+                    latestChatAt = it.latestChatAt,
                     createdAt = it.createdAt!!,
                 )
             }.orElse(null)
@@ -42,11 +48,13 @@ class ChatRepository(
         val entity = chatThreadJpaRepository.save(
             ChatThreadEntity(
                 userId = user.id,
+                latestChatAt = LocalDateTime.now(clock),
             )
         )
         return ChatThread(
             id = entity.id!!,
             userId = entity.userId,
+            latestChatAt = entity.latestChatAt,
             createdAt = entity.createdAt!!,
         )
     }
@@ -70,7 +78,11 @@ class ChatRepository(
         }
     }
 
+    @Transactional
     fun addMessage(thread: ChatThread, message: NewChatMessage): ChatMessage {
+        chatThreadJpaRepository.findById(thread.id)
+            .orElseThrow{ CoreException("Thread not found. threadId=${thread.id}")}
+            .latestChatAt = message.chatAt
         val entity = chatMessageJpaRepository.save(
             ChatMessageEntity(
                 threadId = thread.id,
@@ -96,6 +108,7 @@ class ChatRepository(
             ChatThread(
                 id = it.id!!,
                 userId = it.userId,
+                latestChatAt = it.latestChatAt,
                 createdAt = it.createdAt!!,
             )
         }
@@ -110,6 +123,7 @@ class ChatRepository(
             ChatThread(
                 id = it.id!!,
                 userId = it.userId,
+                latestChatAt = it.latestChatAt,
                 createdAt = it.createdAt!!,
             )
         }

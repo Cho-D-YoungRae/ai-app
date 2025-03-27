@@ -19,7 +19,7 @@ class ChatReader(
     fun getThread(user: User): ChatThread {
         val thread = chatRepository.findLatestThraed(user) ?: chatRepository.createThread(user)
         val thirtyMinutesAgo = LocalDateTime.now(clock).minusMinutes(30)
-        return if (thread.createdAt.isBefore(thirtyMinutesAgo)) {
+        return if (thread.latestChatAt.isBefore(thirtyMinutesAgo)) {
             chatRepository.createThread(user)
         } else {
             thread
