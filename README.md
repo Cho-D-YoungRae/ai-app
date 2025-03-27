@@ -30,6 +30,7 @@ docker compose up -d
 2. 대화(chat) 관리 기능
    - stream 기능 제외
    - redis 등을 통한 세션 개선 제외
+   - Rate Limiting 제외
 3. 사용자 피드백 관리 기능
 4. 분석 및 보고 기능
 5. 대화 관리 기능 세션 개선
