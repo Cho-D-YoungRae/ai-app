@@ -1,4 +1,4 @@
-package com.assignment.aiapp.domain
+package com.assignment.aiapp.domain.user
 
 data class UserSignup(
     val email: String,

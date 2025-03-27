@@ -1,6 +1,6 @@
 package com.assignment.aiapp.api.controller.v1.request
 
-import com.assignment.aiapp.domain.UserLogin
+import com.assignment.aiapp.domain.user.UserLogin
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size

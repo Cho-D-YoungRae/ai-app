@@ -1,4 +1,4 @@
-package com.assignment.aiapp.domain
+package com.assignment.aiapp.domain.user
 
 import com.assignment.aiapp.storage.db.core.UserEntity
 import com.assignment.aiapp.storage.db.core.UserJpaRepository

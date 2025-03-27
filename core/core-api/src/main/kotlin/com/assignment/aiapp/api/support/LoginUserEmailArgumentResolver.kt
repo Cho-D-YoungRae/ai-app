@@ -1,7 +1,7 @@
 package com.assignment.aiapp.api.support
 
-import com.assignment.aiapp.domain.AccessToken
-import com.assignment.aiapp.domain.UserTokenDecoder
+import com.assignment.aiapp.domain.user.AccessToken
+import com.assignment.aiapp.domain.user.UserTokenDecoder
 import com.assignment.aiapp.support.error.CoreException
 import com.assignment.aiapp.support.error.ErrorType
 import org.springframework.core.MethodParameter

@@ -3,7 +3,7 @@ package com.assignment.aiapp.api.controller.v1
 import com.assignment.aiapp.api.controller.v1.request.UserLoginRequest
 import com.assignment.aiapp.api.controller.v1.request.UserSignupRequest
 import com.assignment.aiapp.api.controller.v1.response.UserLoginResponse
-import com.assignment.aiapp.domain.UserService
+import com.assignment.aiapp.domain.user.UserService
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
