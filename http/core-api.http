@@ -21,30 +21,30 @@ Content-Type: application/json
 ### 채팅 1
 POST http://localhost:8080/v1/chat
 Content-Type: application/json
-Authorization: Bearer jwt-cyr@test.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQzMDk0NzM5LCJleHAiOjE3NDMwOTgzMzl9.5AvT_Y1yE_vUG4fLqn2zPmLSbZKHo2Y7DL7Zk5YC9s8
 
 {
-  "content": "안녕 무엇을 도와줄 수 있어?",
+  "content": "끝말잇기할래?",
   "model": "gpt-4o"
 }
 
 ### 채팅 2
 POST http://localhost:8080/v1/chat
 Content-Type: application/json
-Authorization: Bearer jwt-cyr@test.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQzMDk0NzM5LCJleHAiOjE3NDMwOTgzMzl9.5AvT_Y1yE_vUG4fLqn2zPmLSbZKHo2Y7DL7Zk5YC9s8
 
 {
-  "content": "오늘 날씨에 대해 알려줄 수 있어?",
+  "content": "이빨",
   "model": "gpt-4o"
 }
 
 ### 채팅 3
 POST http://localhost:8080/v1/chat
 Content-Type: application/json
-Authorization: Bearer jwt-cyr@test.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzQzMDk0NzM5LCJleHAiOjE3NDMwOTgzMzl9.5AvT_Y1yE_vUG4fLqn2zPmLSbZKHo2Y7DL7Zk5YC9s8
 
 {
-  "content": "그러면 주식 분석은 가능해?",
+  "content": "소방차",
   "model": "gpt-4o"
 }
 

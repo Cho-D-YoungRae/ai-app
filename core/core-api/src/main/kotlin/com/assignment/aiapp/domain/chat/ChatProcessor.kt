@@ -10,14 +10,13 @@ import java.time.LocalDateTime
 @Component
 class ChatProcessor(
     private val clock: Clock,
-    private val chatReader: ChatReader,
     private val chatRepository: ChatRepository,
     private val openAiClient: OpenAiClient
 
 ) {
 
     fun chat(model: String, thread: ChatThread, newMessage: NewChatMessage): ChatMessage {
-        val messages = chatReader.getMessages(thread).toMutableList()
+        val messages = thread.messages.toMutableList()
         messages.add(chatRepository.addMessage(thread, newMessage))
 
         return chatRepository.addMessage(thread, NewChatMessage(

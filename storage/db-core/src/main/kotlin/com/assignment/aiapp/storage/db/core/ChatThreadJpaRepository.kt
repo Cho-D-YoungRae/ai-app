@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ChatThreadJpaRepository : JpaRepository<ChatThreadEntity, Long> {
 
-    fun findFirstByUserIdOrderByLatestChatAtDesc(userId: Long): ChatThreadEntity?
+    fun findFirstByUserIdOrderByCreatedAtDesc(userId: Long): ChatThreadEntity?
 
     fun findAllByUserIdOrderByCreatedAtDesc(userId: Long, pageable: Pageable): List<ChatThreadEntity>
 

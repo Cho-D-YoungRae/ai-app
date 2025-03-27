@@ -20,14 +20,22 @@ class ChatRepository(
     private val chatMessageJpaRepository: ChatMessageJpaRepository,
 ) {
 
-    fun findLatestThraed(user: User): ChatThread? {
-        return chatThreadJpaRepository.findFirstByUserIdOrderByLatestChatAtDesc(user.id)
+    fun findLatestThread(user: User): ChatThread? {
+        return chatThreadJpaRepository.findFirstByUserIdOrderByCreatedAtDesc(user.id)
             ?.let {
                 ChatThread(
                     id = it.id!!,
                     userId = it.userId,
-                    latestChatAt = it.latestChatAt,
                     createdAt = it.createdAt!!,
+                    chatMessageJpaRepository.findAllByThreadIdOrderByChatAtDesc(it.id!!)
+                        .map { messageEntity ->
+                            ChatMessage(
+                                id = messageEntity.id!!,
+                                content = messageEntity.content,
+                                role = messageEntity.role,
+                                chatAt = messageEntity.chatAt,
+                            )
+                        }
                 )
             }
     }
@@ -38,8 +46,16 @@ class ChatRepository(
                 ChatThread(
                     id = it.id!!,
                     userId = it.userId,
-                    latestChatAt = it.latestChatAt,
                     createdAt = it.createdAt!!,
+                    chatMessageJpaRepository.findAllByThreadIdOrderByChatAtDesc(it.id!!)
+                        .map { messageEntity ->
+                            ChatMessage(
+                                id = messageEntity.id!!,
+                                content = messageEntity.content,
+                                role = messageEntity.role,
+                                chatAt = messageEntity.chatAt,
+                            )
+                        }
                 )
             }.orElse(null)
     }
@@ -54,8 +70,8 @@ class ChatRepository(
         return ChatThread(
             id = entity.id!!,
             userId = entity.userId,
-            latestChatAt = entity.latestChatAt,
             createdAt = entity.createdAt!!,
+            messages = emptyList()
         )
     }
 
@@ -63,12 +79,12 @@ class ChatRepository(
     fun delete(thread: ChatThread) {
         chatThreadJpaRepository.deleteById(thread.id)
         chatMessageJpaRepository.deleteAll(
-            chatMessageJpaRepository.findAllByThreadIdOrderByCreatedAtDesc(thread.id)
+            chatMessageJpaRepository.findAllByThreadIdOrderByChatAtDesc(thread.id)
         )
     }
 
     fun findMessages(chatThread: ChatThread): List<ChatMessage> {
-        return chatMessageJpaRepository.findAllByThreadIdOrderByCreatedAtDesc(chatThread.id).map {
+        return chatMessageJpaRepository.findAllByThreadIdOrderByChatAtDesc(chatThread.id).map {
             ChatMessage(
                 id = it.id!!,
                 content = it.content,
@@ -81,7 +97,7 @@ class ChatRepository(
     @Transactional
     fun addMessage(thread: ChatThread, message: NewChatMessage): ChatMessage {
         chatThreadJpaRepository.findById(thread.id)
-            .orElseThrow{ CoreException("Thread not found. threadId=${thread.id}")}
+            .orElseThrow { CoreException("Thread not found. threadId=${thread.id}") }
             .latestChatAt = message.chatAt
         val entity = chatMessageJpaRepository.save(
             ChatMessageEntity(
@@ -100,48 +116,43 @@ class ChatRepository(
     }
 
     fun findThreads(page: Int, size: Int, sort: Sort): List<ChatThread> {
-        return if (sort == Sort.ASC) {
+        val threadEntities = if (sort == Sort.ASC) {
             chatThreadJpaRepository.findAllByOrderByCreatedAtAsc(PageRequest.of(page, size))
         } else {
             chatThreadJpaRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size))
-        }.map {
-            ChatThread(
-                id = it.id!!,
-                userId = it.userId,
-                latestChatAt = it.latestChatAt,
-                createdAt = it.createdAt!!,
-            )
         }
+        return threadEntitiesToChatThreads(threadEntities)
     }
 
     fun findThreads(user: User, page: Int, size: Int, sort: Sort): List<ChatThread> {
-        return if (sort == Sort.ASC) {
+        val threadEntities = if (sort == Sort.ASC) {
             chatThreadJpaRepository.findAllByUserIdOrderByCreatedAtAsc(user.id, PageRequest.of(page, size))
         } else {
             chatThreadJpaRepository.findAllByUserIdOrderByCreatedAtDesc(user.id, PageRequest.of(page, size))
-        }.map {
+        }
+        return threadEntitiesToChatThreads(threadEntities)
+    }
+
+    private fun threadEntitiesToChatThreads(threadEntities: List<ChatThreadEntity>): List<ChatThread> {
+        val threadIdToMessageEntities = chatMessageJpaRepository
+            .findAllByThreadIdIn(threadEntities.map { it.id!! })
+            .groupBy { messageEntity -> messageEntity.threadId }
+        return threadEntities.map {
+            val messages = threadIdToMessageEntities[it.id]?.map { messageEntity ->
+                ChatMessage(
+                    id = messageEntity.id!!,
+                    content = messageEntity.content,
+                    role = messageEntity.role,
+                    chatAt = messageEntity.chatAt,
+                )
+            } ?: emptyList()
             ChatThread(
                 id = it.id!!,
                 userId = it.userId,
-                latestChatAt = it.latestChatAt,
                 createdAt = it.createdAt!!,
+                messages = messages.sortedBy { message -> message.chatAt }.reversed(),
             )
         }
     }
 
-    fun findGroupedMessages(threads: Collection<ChatThread>): Map<Long, List<ChatMessage>> {
-        return chatMessageJpaRepository.findAllByThreadIdIn(threads.map { it.id })
-            .groupBy { messageEntity -> messageEntity.threadId }
-            .mapValues { entry ->
-                entry.value.map {
-                    ChatMessage(
-                        id = it.id!!,
-                        content = it.content,
-                        role = it.role,
-                        chatAt = it.chatAt,
-                    )
-                }
-            }
-
-    }
 }

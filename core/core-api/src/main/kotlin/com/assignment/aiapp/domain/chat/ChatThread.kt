@@ -6,5 +6,10 @@ data class ChatThread(
     val id: Long,
     val userId: Long,
     val createdAt: LocalDateTime,
-    val latestChatAt: LocalDateTime
-)
+    val messages: List<ChatMessage>,
+) {
+
+    fun lastMessage(): ChatMessage? {
+        return messages.lastOrNull()
+    }
+}

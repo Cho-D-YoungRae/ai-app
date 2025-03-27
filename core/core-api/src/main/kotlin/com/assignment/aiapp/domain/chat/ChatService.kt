@@ -24,16 +24,17 @@ class ChatService(
             role = ChatMessageRole.USER,
             chatAt = LocalDateTime.now(clock)
         )
-        val thread = chatReader.getThread(userReader.get(userId))
+        val user = userReader.get(userId)
+        val thread = chatReader.getThread(user)
         return chatProcessor.chat(model, thread, newMessage)
     }
 
-    fun getConversations(userId: Long, page: Int, sort: Sort): List<Conversation> {
+    fun getThreads(userId: Long, page: Int, sort: Sort): List<ChatThread> {
         val user = userReader.get(userId)
         return if (UserRole.ADMIN == user.role) {
-            chatReader.getChatList(page, sort)
+            chatReader.getThreads(page, sort)
         } else {
-            chatReader.getChatList(user, page, sort)
+            chatReader.getThreads(user, page, sort)
         }
     }
 

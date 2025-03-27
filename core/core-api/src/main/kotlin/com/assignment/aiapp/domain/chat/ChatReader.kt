@@ -17,9 +17,9 @@ class ChatReader(
 ) {
 
     fun getThread(user: User): ChatThread {
-        val thread = chatRepository.findLatestThraed(user) ?: chatRepository.createThread(user)
+        val thread = chatRepository.findLatestThread(user) ?: chatRepository.createThread(user)
         val thirtyMinutesAgo = LocalDateTime.now(clock).minusMinutes(30)
-        return if (thread.latestChatAt.isBefore(thirtyMinutesAgo)) {
+        return if (thread.lastMessage()?.chatAt?.isBefore(thirtyMinutesAgo) == true) {
             chatRepository.createThread(user)
         } else {
             thread
@@ -33,29 +33,11 @@ class ChatReader(
         )
     }
 
-    fun getMessages(thread: ChatThread): List<ChatMessage> {
-        return chatRepository.findMessages(thread)
+    fun getThreads(page: Int, sort: Sort): List<ChatThread> {
+        return chatRepository.findThreads(page, CHAT_PAGE_SIZE, sort)
     }
 
-    fun getChatList(page: Int, sort: Sort): List<Conversation> {
-        val threads = chatRepository.findThreads(page, CHAT_PAGE_SIZE, sort)
-        val threadIdToMessages = chatRepository.findGroupedMessages(threads)
-        return threads.map { thread ->
-            Conversation(
-                thread = thread,
-                messages = threadIdToMessages[thread.id] ?: emptyList(),
-            )
-        }
-    }
-
-    fun getChatList(user: User, page: Int, sort: Sort): List<Conversation> {
-        val threads = chatRepository.findThreads(user, page, CHAT_PAGE_SIZE, sort)
-        val threadIdToMessages = chatRepository.findGroupedMessages(threads)
-        return threads.map { thread ->
-            Conversation(
-                thread = thread,
-                messages = threadIdToMessages[thread.id] ?: emptyList(),
-            )
-        }
+    fun getThreads(user: User, page: Int, sort: Sort): List<ChatThread> {
+        return chatRepository.findThreads(user, page, CHAT_PAGE_SIZE, sort)
     }
 }
