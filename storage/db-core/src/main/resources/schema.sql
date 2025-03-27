@@ -28,8 +28,9 @@ create table chat_message
     thread_id  bigint        not null,
     content    varchar(4000) not null,
     role       varchar(25)   not null,
+    chat_at    timestamp(6)  not null,
     created_at timestamp(6)  not null,
     updated_at timestamp(6)  not null
 );
 
-create index ix_chat_message__threadid_createdat on chat_message (thread_id, created_at desc);
+create index ix_chat_message__threadid_chatat on chat_message (thread_id, chat_at desc);
