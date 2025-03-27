@@ -1,0 +1,9 @@
+### 회원가입
+POST http://localhost:8080/v1/signup
+Content-Type: application/json
+
+{
+  "email": "cyr@test.com",
+  "password": "1234",
+  "name": "조영래"
+}

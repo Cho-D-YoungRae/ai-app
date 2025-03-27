@@ -18,4 +18,14 @@ class UserRepository(
             )
         )
     }
+
+    fun find(email: String): User? {
+        return userJpaRepository.findByEmail(email)?.let {
+            User(
+                email = it.email,
+                name = it.name,
+                role = it.role
+            )
+        }
+    }
 }
