@@ -57,12 +57,18 @@ DELETE {{baseUrl}}/v1/threads/1
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
-### 피드백
+### 피드백 생성
 POST {{baseUrl}}/v1/feedback
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "messageId": 6,
+  "messageId": 1,
   "type": "POSITIVE"
 }
+
+
+### 피드백 조회
+GET {{baseUrl}}/v1/feedbacks
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
