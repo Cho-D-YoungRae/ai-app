@@ -28,4 +28,12 @@ class FeedbackProcessor(
 
         feedbackRepository.add(user, chatMessage, type)
     }
+
+    fun update(id: Long, update: FeedbackUpdate) {
+        val feedback = feedbackRepository.find(id) ?: throw CoreException(
+            ErrorType.FEEDBACK_NOT_FOUND,
+            "feedbackId=$id"
+        )
+        feedbackRepository.update(feedback.updateStatus(update.status))
+    }
 }

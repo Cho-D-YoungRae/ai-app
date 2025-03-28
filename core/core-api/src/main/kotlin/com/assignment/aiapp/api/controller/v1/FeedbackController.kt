@@ -2,6 +2,7 @@ package com.assignment.aiapp.api.controller.v1
 
 import com.assignment.aiapp.api.controller.response.ListResponse
 import com.assignment.aiapp.api.controller.v1.request.FeedbackRequest
+import com.assignment.aiapp.api.controller.v1.request.FeedbackUpdateRequest
 import com.assignment.aiapp.api.controller.v1.request.PageRequest
 import com.assignment.aiapp.api.controller.v1.response.FeedbackResponse
 import com.assignment.aiapp.api.support.LoginUserId
@@ -39,6 +40,7 @@ class FeedbackController(
                 sort = pageRequest.sort
             ).map {
                 FeedbackResponse(
+                    id = it.id,
                     userId = it.userId,
                     chatMessageId = it.chatMessageId,
                     type = it.type,
@@ -46,6 +48,19 @@ class FeedbackController(
                     status = it.status
                 )
             }
+        )
+    }
+
+    @PatchMapping("/feedbacks/{feedbackId}")
+    fun update(
+        @PathVariable feedbackId: Long,
+        @RequestBody @Validated request: FeedbackUpdateRequest,
+        @LoginUserId userId: Long
+    ) {
+        feedbackService.update(
+            userId = userId,
+            feedbackId = feedbackId,
+            update = request.toFeedbackUpdate()
         )
     }
 }

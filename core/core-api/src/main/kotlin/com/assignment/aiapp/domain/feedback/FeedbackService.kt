@@ -5,6 +5,8 @@ import com.assignment.aiapp.core.enums.UserRole
 import com.assignment.aiapp.domain.Sort
 import com.assignment.aiapp.domain.chat.ChatReader
 import com.assignment.aiapp.domain.user.UserReader
+import com.assignment.aiapp.support.error.CoreException
+import com.assignment.aiapp.support.error.ErrorType
 import org.springframework.stereotype.Service
 
 @Service
@@ -28,5 +30,13 @@ class FeedbackService(
         } else {
             feedbackReader.getFeedbacks(user, page, sort)
         }
+    }
+
+    fun update(userId: Long, feedbackId: Long, update: FeedbackUpdate) {
+        val user = userReader.get(userId)
+        if (user.role != UserRole.ADMIN) {
+            throw CoreException(ErrorType.FEEDBACK_UPDATE_FORBIDDEN, "userId=$userId")
+        }
+        feedbackProcessor.update(feedbackId, update)
     }
 }

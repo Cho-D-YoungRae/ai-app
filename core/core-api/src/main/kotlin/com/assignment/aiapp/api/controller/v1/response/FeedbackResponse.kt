@@ -5,6 +5,7 @@ import com.assignment.aiapp.core.enums.FeedbackType
 import java.time.LocalDateTime
 
 data class FeedbackResponse(
+    val id: Long,
     val userId: Long,
     val chatMessageId: Long,
     val type: FeedbackType,

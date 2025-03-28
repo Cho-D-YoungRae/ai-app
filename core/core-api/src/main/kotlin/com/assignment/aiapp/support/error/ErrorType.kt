@@ -21,4 +21,6 @@ enum class ErrorType(
 
     FEEDBACK_ALREADY_EXISTS(ErrorKind.DUPLICATED, "피드백이 이미 존재합니다.", LogLevel.INFO),
     FEEDBACK_CREATE_FORBIDDEN(ErrorKind.FORBIDDEN, "자신의 대화만 피드백할 수 있습니다.", LogLevel.INFO),
+    FEEDBACK_UPDATE_FORBIDDEN(ErrorKind.FORBIDDEN, "피드백은 관리자만 업데이트할 수 있습니다.", LogLevel.INFO),
+    FEEDBACK_NOT_FOUND(ErrorKind.NOT_FOUND, "피드백을 찾을 수 없습니다.", LogLevel.INFO),
 }

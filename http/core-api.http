@@ -13,8 +13,8 @@ POST {{baseUrl}}/v1/login
 Content-Type: application/json
 
 {
-  "email": "cyr@test.com",
-  "password": "1234"
+  "email": "admin@test.com",
+  "password": "admin"
 }
 
 
@@ -72,3 +72,13 @@ Authorization: Bearer {{accessToken}}
 GET {{baseUrl}}/v1/feedbacks
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+
+### 피드백 상태 변경
+PATCH {{baseUrl}}/v1/feedbacks/1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "status": "RESOLVED"
+}

@@ -11,4 +11,9 @@ data class Feedback(
     val type: FeedbackType,
     val createdAt: LocalDateTime,
     val status: FeedbackStatus
-)
+) {
+
+    fun updateStatus(status: FeedbackStatus): Feedback {
+        return this.copy(status = status)
+    }
+}
